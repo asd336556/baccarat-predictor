@@ -1,0 +1,77 @@
+
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>百家樂長龍預測</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; background: #f5f5f5; }
+        h1 { color: #333; }
+        .history { margin: 10px 0; font-size: 18px; }
+        .buttons button {
+            font-size: 18px;
+            padding: 10px 20px;
+            margin-right: 10px;
+            margin-top: 10px;
+        }
+        .result { margin-top: 20px; font-size: 20px; color: #006400; }
+    </style>
+</head>
+<body>
+    <h1>百家樂長龍預測工具</h1>
+    <div class="history" id="historyDisplay">歷史結果：無</div>
+    <div class="buttons">
+        <button onclick="addResult('莊')">莊</button>
+        <button onclick="addResult('閒')">閒</button>
+        <button onclick="addResult('和')">和</button>
+        <button onclick="resetHistory()">重置</button>
+    </div>
+    <div class="result" id="prediction">請輸入結果開始預測。</div>
+
+    <script>
+        let history = [];
+
+        function addResult(result) {
+            history.push(result);
+            updateDisplay();
+        }
+
+        function resetHistory() {
+            history = [];
+            updateDisplay();
+        }
+
+        function updateDisplay() {
+            const display = document.getElementById("historyDisplay");
+            const prediction = document.getElementById("prediction");
+
+            if (history.length === 0) {
+                display.textContent = "歷史結果：無";
+                prediction.textContent = "請輸入結果開始預測。";
+                return;
+            }
+
+            display.textContent = "歷史結果：" + history.join(" ");
+
+            // 長龍策略預測邏輯
+            let last = history[history.length - 1];
+            let streak = 1;
+
+            for (let i = history.length - 2; i >= 0; i--) {
+                if (history[i] === last) {
+                    streak++;
+                } else {
+                    break;
+                }
+            }
+
+            if (streak >= 2 && (last === "莊" || last === "閒")) {
+                prediction.textContent = "預測下一局：繼續壓「" + last + "」";
+            } else {
+                prediction.textContent = "預測下一局：無明顯長龍，建議觀望";
+            }
+        }
+    </script>
+</body>
+</html>
